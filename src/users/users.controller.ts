@@ -6,7 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { Express } from 'express';
+
+import { SingleImageUploadInterceptor } from '../interceptors/SingleImageUploadInterceptors';
 import { CreateUserDto } from './dto/create-user-dto';
 
 import { UsersService } from './users.service';
@@ -20,9 +25,17 @@ export class UsersController {
     return this.usersService.get();
   }
 
+  @UseInterceptors(SingleImageUploadInterceptor(3 * 1024 * 1024))
   @Post('/')
-  async post(@Body() body: CreateUserDto): Promise<any> {
-    const user = await this.usersService.post(body);
+  async post(
+    @Body() body: CreateUserDto,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<any> {
+    console.log('image info', file);
+    const user = await this.usersService.post({
+      ...body,
+      image: file.filename,
+    });
 
     return {
       message: 'User Created Successfully',
