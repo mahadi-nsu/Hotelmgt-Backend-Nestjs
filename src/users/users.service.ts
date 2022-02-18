@@ -8,8 +8,9 @@ import { User } from './user.model';
 export class UsersService {
   constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
-  async get(): Promise<any> {
-    return { message: 'This is GET!' };
+  async getAllUsers(): Promise<any> {
+    const result = await this.userModel.find();
+    return result;
   }
 
   async post(data: CreateUserDto): Promise<User> {

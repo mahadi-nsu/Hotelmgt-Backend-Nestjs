@@ -22,7 +22,11 @@ export class UsersController {
 
   @Get('/')
   async get(): Promise<any> {
-    return this.usersService.get();
+    const alluser = await this.usersService.getAllUsers();
+    return {
+      message: 'All user fetched Successfully',
+      data: alluser,
+    };
   }
 
   @UseInterceptors(SingleImageUploadInterceptor(3 * 1024 * 1024))

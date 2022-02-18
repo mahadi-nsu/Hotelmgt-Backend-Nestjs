@@ -2,7 +2,7 @@ import { Schema, Document } from 'mongoose';
 
 export const UserSchema = new Schema(
   {
-    name: { type: String, unique: true, required: true },
+    name: { type: String, required: true },
     designation: { type: String, required: true },
     description: { type: String, required: true },
     image: { type: String },
