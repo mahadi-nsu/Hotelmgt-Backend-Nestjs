@@ -1,15 +1,27 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { FilterQuery, Model, Types } from 'mongoose';
+import { CreateUserDto } from './dto/create-user-dto';
+import { User } from './user.model';
 
 @Injectable()
 export class UsersService {
-  constructor() {}
+  constructor(@InjectModel('User') private readonly userModel: Model<User>) {}
 
   async get(): Promise<any> {
     return { message: 'This is GET!' };
   }
 
-  async post(body: any): Promise<any> {
-    return { message: 'This is POST!', body };
+  async post(data: CreateUserDto): Promise<User> {
+    const { name, designation, description, image } = data;
+    const newUser = new this.userModel({
+      name,
+      designation,
+      description,
+      image,
+    });
+    const result = await newUser.save();
+    return result;
   }
 
   async patch(id: string, body: any): Promise<any> {

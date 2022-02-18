@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
 } from '@nestjs/common';
+import { CreateUserDto } from './dto/create-user-dto';
 
 import { UsersService } from './users.service';
 
@@ -20,8 +21,13 @@ export class UsersController {
   }
 
   @Post('/')
-  async post(@Body() body: any): Promise<any> {
-    return this.usersService.post(body);
+  async post(@Body() body: CreateUserDto): Promise<any> {
+    const user = await this.usersService.post(body);
+
+    return {
+      message: 'User Created Successfully',
+      data: user,
+    };
   }
 
   @Patch('/:id')
