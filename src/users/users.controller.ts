@@ -14,6 +14,7 @@ import { Express } from 'express';
 
 import { SingleImageUploadInterceptor } from '../interceptors/SingleImageUploadInterceptors';
 import { CreateUserDto } from './dto/create-user-dto';
+import { UpdateUserDto } from './dto/update-user-dto';
 
 import { UsersService } from './users.service';
 
@@ -60,9 +61,18 @@ export class UsersController {
     };
   }
 
-  @Patch('/:id')
-  async updateUser(@Param('id') id: string, @Body() body: any): Promise<any> {
-    return this.usersService.patch(id, body);
+  @Patch('/userupdate/:id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body() data: UpdateUserDto,
+  ): Promise<any> {
+    console.log(data);
+    const updatedUser = await this.usersService.patch(id, data);
+
+    return {
+      message: 'User Updated Successfully',
+      data: updatedUser,
+    };
   }
 
   @Delete('delete/:id')

@@ -4,6 +4,7 @@ import { FilterQuery, Model, Types } from 'mongoose';
 import { CreateUserDto } from './dto/create-user-dto';
 import { User } from './user.model';
 import { DeleteResult } from 'mongodb';
+import { UpdateUserDto } from './dto/update-user-dto';
 
 @Injectable()
 export class UsersService {
@@ -31,8 +32,18 @@ export class UsersService {
     return result;
   }
 
-  async patch(id: string, body: any): Promise<any> {
-    return { message: `This is PATCH for ID -> ${id}!`, body };
+  async patch(id: string, data: UpdateUserDto): Promise<any> {
+    console.log(data);
+    const usertobeUpdated = await this.userModel.findById(id);
+
+    if (!usertobeUpdated) {
+      throw new NotFoundException('User Not Found');
+    }
+
+    usertobeUpdated.set(data);
+    const result = await usertobeUpdated.save();
+
+    return result;
   }
 
   async delete(id: string): Promise<DeleteResult> {
