@@ -22,7 +22,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('/all')
-  async get(): Promise<any> {
+  async getAllUser(): Promise<any> {
     const alluser = await this.usersService.getAllUsers();
     return {
       message: 'All user fetched Successfully',
@@ -32,11 +32,10 @@ export class UsersController {
 
   @UseInterceptors(SingleImageUploadInterceptor(3 * 1024 * 1024))
   @Post('/')
-  async post(
+  async createUser(
     @Body() body: CreateUserDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<any> {
-    console.log('image info', file);
     const user = await this.usersService.post({
       ...body,
       image: file.filename,
@@ -62,12 +61,12 @@ export class UsersController {
   }
 
   @Patch('/:id')
-  async patch(@Param('id') id: string, @Body() body: any): Promise<any> {
+  async updateUser(@Param('id') id: string, @Body() body: any): Promise<any> {
     return this.usersService.patch(id, body);
   }
 
   @Delete('delete/:id')
-  async delete(@Param('id') id: string): Promise<any> {
+  async deleteUser(@Param('id') id: string): Promise<any> {
     const result = await this.usersService.delete(id);
 
     return {
