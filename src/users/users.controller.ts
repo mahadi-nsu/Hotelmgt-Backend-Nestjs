@@ -66,8 +66,13 @@ export class UsersController {
     return this.usersService.patch(id, body);
   }
 
-  @Delete('/:id')
+  @Delete('delete/:id')
   async delete(@Param('id') id: string): Promise<any> {
-    return this.usersService.delete(id);
+    const result = await this.usersService.delete(id);
+
+    return {
+      message: 'User Deleted Successfully',
+      data: result,
+    };
   }
 }

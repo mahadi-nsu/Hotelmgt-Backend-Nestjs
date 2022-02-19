@@ -1,8 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { FilterQuery, Model, Types } from 'mongoose';
 import { CreateUserDto } from './dto/create-user-dto';
 import { User } from './user.model';
+import { DeleteResult } from 'mongodb';
 
 @Injectable()
 export class UsersService {
@@ -34,7 +35,13 @@ export class UsersService {
     return { message: `This is PATCH for ID -> ${id}!`, body };
   }
 
-  async delete(id: string): Promise<any> {
-    return { message: `This is DELETE for ID -> ${id}!` };
+  async delete(id: string): Promise<DeleteResult> {
+    const usertobeDeleted = await this.userModel.findById(id);
+    if (!usertobeDeleted) {
+      throw new NotFoundException('User not found to be deleted');
+    }
+
+    const result = await this.userModel.deleteOne({ _id: id });
+    return result;
   }
 }
