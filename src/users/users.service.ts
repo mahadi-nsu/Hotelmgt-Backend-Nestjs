@@ -13,6 +13,11 @@ export class UsersService {
     return result;
   }
 
+  async getSingle(id: string): Promise<User | null> {
+    const result = await this.userModel.findById(id);
+    return result;
+  }
+
   async post(data: CreateUserDto): Promise<User> {
     const { name, designation, description, image } = data;
     const newUser = new this.userModel({

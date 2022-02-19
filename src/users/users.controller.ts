@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  NotFoundException,
   Param,
   Patch,
   Post,
@@ -20,7 +21,7 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get('/')
+  @Get('/all')
   async get(): Promise<any> {
     const alluser = await this.usersService.getAllUsers();
     return {
@@ -43,6 +44,19 @@ export class UsersController {
 
     return {
       message: 'User Created Successfully',
+      data: user,
+    };
+  }
+
+  @Get('/singleuser/:id')
+  async getSingleUser(@Param('id') id: string): Promise<any> {
+    const user = await this.usersService.getSingle(id);
+    if (!user) {
+      throw new NotFoundException('User Not Found');
+    }
+
+    return {
+      message: 'User details',
       data: user,
     };
   }
