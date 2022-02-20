@@ -61,13 +61,22 @@ export class UsersController {
     };
   }
 
+  @UseInterceptors(SingleImageUploadInterceptor(3 * 1024 * 1024))
   @Patch('/userupdate/:id')
   async updateUser(
     @Param('id') id: string,
     @Body() data: UpdateUserDto,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<any> {
     console.log(data);
-    const updatedUser = await this.usersService.patch(id, data);
+
+    const dataToUpdate = { ...data };
+
+    if (file) {
+      dataToUpdate.image = file.filename;
+    }
+
+    const updatedUser = await this.usersService.patch(id, dataToUpdate);
 
     return {
       message: 'User Updated Successfully',
