@@ -29,6 +29,6 @@ https://documenter.getpostman.com/view/13826612/UVkjwJLL
 ## 🚫 .ENV file  
 
 ```bash
-.env file uploaded for reducing hassle for testing end . It's not recommended ! 
+.env file uploaded for reducing hassle at testing end . It's not recommended ! 
 ```
 
