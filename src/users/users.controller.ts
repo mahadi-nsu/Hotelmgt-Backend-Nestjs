@@ -37,6 +37,10 @@ export class UsersController {
     @Body() body: CreateUserDto,
     @UploadedFile() file: Express.Multer.File,
   ): Promise<any> {
+    if (!file) {
+      return { error: 'Please upload a valid image' };
+    }
+
     const user = await this.usersService.post({
       ...body,
       image: file.filename,
